@@ -24,7 +24,7 @@ The RAM backend is process-local and ephemeral. Filesystem backends store one pa
 
 ### Java
 
-Java 17+, Maven:
+Java 25+, Maven:
 
 ```java
 MemoryStore store = new RamCacheMemoryStore(

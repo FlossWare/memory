@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -70,7 +71,13 @@ public final class FileSystemMemoryStore implements MemoryStore {
                  .map(Path::toString)
                  .filter(name -> !name.startsWith(".memory-") && name.endsWith(".mem"))
                  .map(name -> name.substring(0, name.length() - 4))
-                 .forEach(ids::add);
+                 .forEach(encoded -> {
+                     try {
+                         ids.add(new String(HexFormat.of().parseHex(encoded), StandardCharsets.UTF_8));
+                     } catch (IllegalArgumentException malformed) {
+                         // Ignore unrelated or malformed files in the storage directory.
+                     }
+                 });
         }
         ids.sort(String::compareTo);
         return List.copyOf(ids);
@@ -78,12 +85,7 @@ public final class FileSystemMemoryStore implements MemoryStore {
 
     private Path pathFor(String id) {
         // Encode every UTF-8 byte as hex: IDs cannot escape the storage directory.
-        byte[] bytes = id.getBytes(StandardCharsets.UTF_8);
-        StringBuilder name = new StringBuilder(bytes.length * 2 + 4);
-        for (byte value : bytes) {
-            name.append(Character.forDigit((value >>> 4) & 0xf, 16));
-            name.append(Character.forDigit(value & 0xf, 16));
-        }
+        String name = HexFormat.of().formatHex(id.getBytes(StandardCharsets.UTF_8));
         Path path = directory.resolve(name + ".mem").normalize();
         if (!path.getParent().equals(directory)) {
             throw new IllegalArgumentException("id resolves outside storage directory");

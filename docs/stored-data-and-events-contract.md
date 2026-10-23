@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The memory service exposes the memory-domain data it actually persists independently of search and derived retrieval mechanisms. It also publishes domain-change notifications through a technology-neutral publication port, with a no-op implementation available by default.
+The memory service exposes the memory-domain data it actually persists independently of search and derived retrieval mechanisms. It also publishes domain-change notifications through the shared FlossWare/messaging contract, using its no-op implementation when no transport is configured. Memory SHALL NOT define a competing local event envelope.
 
 This document defines intended contract behavior. It does not claim that every current backend already implements every capability.
 
@@ -45,7 +45,7 @@ A stale, unavailable, or rebuilding search index SHALL NOT make an otherwise per
 
 ## Domain change publication
 
-The memory service SHALL define and invoke a technology-neutral publication port for successful domain state changes. A no-op publisher SHALL be available and MAY be the default. Core memory operations SHALL not require a deployed broker or messaging service.
+The memory service SHALL publish successful domain state changes through the shared FlossWare/messaging contract. It SHALL use the contract's no-op publisher when no transport is configured. Core memory operations SHALL not require a deployed broker or standalone network messaging service.
 
 Initial event types SHOULD include:
 

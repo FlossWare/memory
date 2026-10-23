@@ -56,9 +56,13 @@ Run tests with `python -m unittest discover -s tests`.
 
 The filesystem store remains authoritative in a RAM-cache/filesystem composition. The cache is read-through and write-through; puts update it only after the delegate write succeeds, and deletes evict cached values. Cache coherence applies to operations through the decorator. Changes made directly to the delegate are not observed by an existing cache. The outermost decorator owns and closes its delegate.
 
-## Stored-data access and change notifications
+## REST service
 
-The intended stored-data contract is documented in [Stored Data Access Contract](docs/stored-data-and-events-contract.md). It distinguishes direct access/export of persisted memory-domain data from search over derived indexes. Messaging and event publication are deferred.
+See [service/README.md](service/README.md) for the initial PostgreSQL-backed REST service, direct record retrieval, pagination, export, and lexical search. Messaging is deferred.
+
+## Stored-data access contract
+
+See [Stored Data Access Contract](docs/stored-data-and-events-contract.md) for direct access, representation fidelity, and complete paginated export requirements. Search is a separate capability.
 
 ## Architectural boundaries
 

@@ -1,4 +1,4 @@
-# Stored Data Access and Change Events Contract
+# Stored Data Access Contract
 
 ## Purpose
 

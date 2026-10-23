@@ -58,7 +58,7 @@ The filesystem store remains authoritative in a RAM-cache/filesystem composition
 
 ## Stored-data access and change notifications
 
-The intended service contract is documented in [Stored Data Access and Change Events Contract](docs/stored-data-and-events-contract.md). It distinguishes direct access/export of persisted memory-domain data from search over derived indexes, and defines a technology-neutral event publication port with a no-op default. This contract document describes target behavior; it does not imply that all listed API capabilities are implemented yet.
+The intended stored-data contract is documented in [Stored Data Access Contract](docs/stored-data-and-events-contract.md). It distinguishes direct access/export of persisted memory-domain data from search over derived indexes. Messaging and event publication are deferred.
 
 ## Architectural boundaries
 

@@ -45,7 +45,7 @@ A stale, unavailable, or rebuilding search index SHALL NOT make an otherwise per
 
 ## Domain change publication
 
-The memory service SHALL publish successful domain state changes through the shared FlossWare/messaging contract. It SHALL use the contract's no-op publisher when no transport is configured. Core memory operations SHALL not require a deployed broker or standalone network messaging service.
+The memory service SHALL publish successful domain state changes through the shared FlossWare/messaging contract using fire-and-forget semantics. It SHALL use the contract's no-op publisher when no transport is configured. Memory operations SHALL NOT wait for consumer processing or acknowledgements, and SHALL not require a deployed broker or standalone network messaging service.
 
 Initial event types SHOULD include:
 

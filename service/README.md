@@ -9,7 +9,7 @@ Requires Python 3.10+ and PostgreSQL. From the repository root:
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-pip install -r service/requirements.txt
+pip install -r service/requirements-dev.txt
 export MEMORY_DATABASE_URL='postgresql://localhost/flossware_memory'
 export MEMORY_PROJECT_TOKENS='{"demo":"replace-with-a-project-specific-secret"}'
 export MEMORY_ADMIN_TOKEN='replace-with-a-separate-admin-secret'

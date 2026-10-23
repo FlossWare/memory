@@ -29,7 +29,7 @@ Every request requires `Authorization: Bearer ...` and `X-Project-Id`. `MEMORY_P
 - `POST /api/v1/memories`: create or replace a record; requires `Idempotency-Key`.
 - `GET /api/v1/memories/{id}`: retrieve the complete persisted record by ID.
 - `GET /api/v1/memories?offset=0&limit=100`: enumerate records visible to the authenticated project, with stable ordering and pagination.
-- `GET /api/v1/memories/export?offset=0&limit=1000`: paginated export using the same complete stored-record representation.
+- `GET /api/v1/export?offset=0&limit=1000`: paginated export using the same complete stored-record representation.
 - `GET /api/v1/search?query=...`: PostgreSQL lexical full-text search, separate from direct access.
 - `DELETE /api/v1/memories/{id}`: delete a record owned by the authenticated project.
 

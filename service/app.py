@@ -144,7 +144,7 @@ def list_memories(offset: int = Query(0,ge=0), limit: int = Query(100,ge=1,le=10
         rows = conn.execute("SELECT * FROM memory_records WHERE "+visible_clause()+" ORDER BY updated_at DESC,id ASC OFFSET %s LIMIT %s", (project,offset,limit)).fetchall()
     return {"items":[row_out(r) for r in rows],"total":total,"offset":offset,"limit":limit,"next_offset":offset+len(rows) if offset+len(rows)<total else None}
 
-@app.get("/api/v1/memories/export")
+@app.get("/api/v1/export")
 def export_memories(offset: int = Query(0,ge=0), limit: int = Query(1000,ge=1,le=1000), project: str = Depends(project_context)):
     return list_memories(offset,limit,project)
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The memory service exposes the memory-domain data it actually persists independently of search and derived retrieval mechanisms. It also publishes domain-change notifications through the shared FlossWare/messaging contract, using its no-op implementation when no transport is configured. Memory SHALL NOT define a competing local event envelope.
+The memory service exposes the memory-domain data it actually persists independently of search and derived retrieval mechanisms. Messaging and change-event publication are deferred.
 
 This document defines intended contract behavior. It does not claim that every current backend already implements every capability.
 
@@ -43,27 +43,9 @@ Text search, semantic vector search, hybrid search, ranking, summaries, and retr
 
 A stale, unavailable, or rebuilding search index SHALL NOT make an otherwise persisted record inaccessible through direct retrieval or complete enumeration/export. Search MAY be temporarily degraded while stored-data access remains available.
 
-## Domain change publication
-
-The memory service SHALL publish successful domain state changes through the shared FlossWare/messaging contract using fire-and-forget semantics. It SHALL use the contract's no-op publisher when no transport is configured. Memory operations SHALL NOT wait for consumer processing or acknowledgements, and SHALL not require a deployed broker or standalone network messaging service.
-
-Initial event types SHOULD include:
-
-- `memory.record.created`
-- `memory.record.updated`
-- `memory.record.deleted`
-
-Events SHALL identify the record and the change; include an event ID, event type, envelope version, occurrence time, producer identity, and record revision where available; and carry a schema-defined payload. Event payloads SHOULD remain compact and avoid copying large content unless the event contract explicitly requires it. Consumers can fetch the full persisted record through the stored-data API.
-
-The publisher call SHALL occur only after the relevant state transition has succeeded. A no-op publisher SHALL preserve ordinary operation behavior. A future real publisher MUST document delivery and failure semantics. If losing a notification is unacceptable, a durable outbox or equivalent mechanism SHOULD be considered rather than claiming that an ordinary post-write publish is atomic.
-
-Events are notifications, not the source of truth. Consumers SHALL tolerate duplicates and SHOULD support reconciliation through direct access or export. The event contract does not currently promise durable delivery, replay, global ordering, or exactly-once processing.
-
 ## Decorator composition
 
-Stored-data access and event publication SHOULD be implementable as composable contract implementations or decorators where appropriate. For example, an event-publishing decorator can delegate to a storage implementation, then publish the successful change without coupling the storage implementation to a broker.
-
-Decorator order and failure semantics MUST be documented where they affect observable behavior. A decorator SHALL NOT claim stronger persistence/publication atomicity than its underlying implementation provides.
+Stored-data access SHOULD be implementable through composable contract implementations or decorators where appropriate. Decorators MUST preserve direct access to the delegate's authoritative stored data and document observable ordering or failure behavior.
 
 ## Acceptance criteria
 
@@ -71,6 +53,3 @@ Decorator order and failure semantics MUST be documented where they affect obser
 - Enumeration/export does not depend on search results and covers all supported persisted memory-domain data.
 - Exported records preserve stored content and metadata; persisted chunks and vectors preserve identity and source links where available.
 - Backends clearly identify unsupported derived representations.
-- Successful create/update/delete operations invoke the publication port with the appropriate event; failed state changes do not announce a successful change.
-- The no-op publisher requires no external infrastructure and does not change operation outcomes.
-- Tests verify duplicate-safe event identity and record-fetch follow-up behavior where those fields are supported.

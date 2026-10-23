@@ -105,7 +105,7 @@ def put_memory(body: Write, project: str = Depends(project_context), idempotency
         scope_id = project
     elif not scope_id:
         raise HTTPException(422, detail={"code":"invalid_scope","message":"session_task scope requires an id"})
-    memory_id = body.id or str(uuid4())
+    memory_id = body.id or hashlib.sha256((project + ":" + idempotency_key).encode()).hexdigest()
     material = json.dumps({"id":memory_id,"content":body.content,"scope_type":scope_type,"scope_id":scope_id,"metadata":body.metadata,"provenance":body.provenance}, sort_keys=True, separators=(",",":"))
     digest = hashlib.sha256(material.encode()).hexdigest()
     with db() as conn:

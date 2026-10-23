@@ -56,6 +56,10 @@ Run tests with `python -m unittest discover -s tests`.
 
 The filesystem store remains authoritative in a RAM-cache/filesystem composition. The cache is read-through and write-through; puts update it only after the delegate write succeeds, and deletes evict cached values. Cache coherence applies to operations through the decorator. Changes made directly to the delegate are not observed by an existing cache. The outermost decorator owns and closes its delegate.
 
+## Stored-data access and change notifications
+
+The intended stored-data contract is documented in [Stored Data Access Contract](docs/stored-data-and-events-contract.md). It distinguishes direct access/export of persisted memory-domain data from search over derived indexes. Messaging and event publication are deferred.
+
 ## Architectural boundaries
 
 - Storage provides persistence mechanisms; memory defines memory-specific semantics.

@@ -59,6 +59,8 @@ def project_context(authorization: str | None = Header(default=None), x_project_
     if not authorization or not authorization.startswith("Bearer ") or not x_project_id:
         raise HTTPException(401, detail={"code":"unauthorized","message":"Bearer token and X-Project-Id are required"})
     token = authorization[7:]
+    if ADMIN_TOKEN and hmac.compare_digest(token, ADMIN_TOKEN):
+        return x_project_id
     expected = PROJECT_TOKENS.get(x_project_id)
     if not expected or not hmac.compare_digest(str(expected), token):
         raise HTTPException(403, detail={"code":"project_forbidden","message":"Token is not authorized for this project"})

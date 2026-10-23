@@ -56,6 +56,10 @@ Run tests with `python -m unittest discover -s tests`.
 
 The filesystem store remains authoritative in a RAM-cache/filesystem composition. The cache is read-through and write-through; puts update it only after the delegate write succeeds, and deletes evict cached values. Cache coherence applies to operations through the decorator. Changes made directly to the delegate are not observed by an existing cache. The outermost decorator owns and closes its delegate.
 
+## REST service
+
+See [service/README.md](service/README.md) for the initial PostgreSQL-backed REST service, direct record retrieval, pagination, export, and lexical search. Messaging is deferred.
+
 ## Architectural boundaries
 
 - Storage provides persistence mechanisms; memory defines memory-specific semantics.
